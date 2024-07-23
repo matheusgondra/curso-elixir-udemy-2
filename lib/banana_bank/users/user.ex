@@ -17,10 +17,6 @@ defmodule BananaBank.Users.User do
     timestamps()
   end
 
-  @spec changeset(
-          :invalid
-          | %{optional(:__struct__) => none(), optional(atom() | binary()) => any()}
-        ) :: Ecto.Changeset.t()
   def changeset(user \\ %__MODULE__{}, params) do
     user
     |> cast(params, @required_params)
