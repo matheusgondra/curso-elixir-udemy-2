@@ -7,29 +7,31 @@ defmodule BananaBankWeb.UsersControllerTest do
   alias BananaBank.Users
   alias BananaBank.ViaCep.ClientMock
 
-  setup :verify_on_exit!
+  setup do
+    params = %{
+      "name" => "John Doe",
+      "cep" => "29560000",
+      "email" => "john@doe.com",
+      "password" => "123456"
+    }
+
+    body = %{
+      "bairro" => "",
+      "cep" => "29560-000",
+      "complemento" => "",
+      "ddd" => "28",
+      "gia" => "",
+      "ibge" => "3202306",
+      "localidade" => "Guaiçu",
+      "siafi" => "5645",
+      "uf" => "ES"
+    }
+
+    {:ok, %{user_params: params, body: body}}
+  end
 
   describe "create/2" do
-    test "successfully creates an user", %{conn: conn} do
-      params = %{
-        "name" => "John Doe",
-        "cep" => "29560000",
-        "email" => "john@doe.com",
-        "password" => "123456"
-      }
-
-      body = %{
-        "bairro" => "",
-        "cep" => "29560-000",
-        "complemento" => "",
-        "ddd" => "28",
-        "gia" => "",
-        "ibge" => "3202306",
-        "localidade" => "Guaiçu",
-        "siafi" => "5645",
-        "uf" => "ES"
-      }
-
+    test "successfully creates an user", %{conn: conn, user_params: params, body: body} do
       expect(ClientMock, :call, fn "29560000" ->
         {:ok, body}
       end)
@@ -48,25 +50,13 @@ defmodule BananaBankWeb.UsersControllerTest do
     test "when there are invalid params, returns an error", %{conn: conn} do
       params = %{
         "name" => nil,
-        "cep" => "29560000",
+        "cep" => "12",
         "email" => "john@doe.com",
-        "password" => "12"
+        "password" => "1"
       }
 
-      body = %{
-        "bairro" => "",
-        "cep" => "29560-000",
-        "complemento" => "",
-        "ddd" => "28",
-        "gia" => "",
-        "ibge" => "3202306",
-        "localidade" => "Guaiçu",
-        "siafi" => "5645",
-        "uf" => "ES"
-      }
-
-      expect(ClientMock, :call, fn "29560000" ->
-        {:ok, body}
+      expect(ClientMock, :call, fn "12" ->
+        {:ok, ""}
       end)
 
       response =
@@ -77,7 +67,8 @@ defmodule BananaBankWeb.UsersControllerTest do
       expected_response = %{
         "errors" => %{
           "name" => ["can't be blank"],
-          "password" => ["should be at least 6 character(s)"]
+          "password" => ["should be at least 6 character(s)"],
+          "cep" => ["should be 8 character(s)"]
         }
       }
 
@@ -86,26 +77,7 @@ defmodule BananaBankWeb.UsersControllerTest do
   end
 
   describe "delete/2" do
-    test "successfully deletes an user", %{conn: conn} do
-      params = %{
-        "name" => "John Doe",
-        "cep" => "29560000",
-        "email" => "john@doe.com",
-        "password" => "123456"
-      }
-
-      body = %{
-        "bairro" => "",
-        "cep" => "29560-000",
-        "complemento" => "",
-        "ddd" => "28",
-        "gia" => "",
-        "ibge" => "3202306",
-        "localidade" => "Guaiçu",
-        "siafi" => "5645",
-        "uf" => "ES"
-      }
-
+    test "successfully deletes an user", %{conn: conn, user_params: params, body: body} do
       expect(ClientMock, :call, fn "29560000" ->
         {:ok, body}
       end)
