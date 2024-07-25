@@ -19,17 +19,10 @@ defmodule BananaBankWeb.ErrorJSON do
     %{errors: %{detail: Phoenix.Controller.status_message_from_template(template)}}
   end
 
-  def error(%{status: :not_found}) do
-    %{message: "Resource not found", status: :not_found}
-  end
-
-  def error(%{status: status}) do
-    %{status: status}
-  end
-
-  def error(%{changeset: changeset}) do
-    %{errors: Ecto.Changeset.traverse_errors(changeset, &translate_error/1)}
-  end
+  def error(%{status: :not_found}), do: %{message: "Resource not found", status: :not_found}
+  def error(%{status: status}), do: %{status: status}
+  def error(%{msg: msg}), do: %{message: msg}
+  def error(%{changeset: changeset}), do: %{errors: Ecto.Changeset.traverse_errors(changeset, &translate_error/1)}
 
   defp translate_error({msg, opts}) do
     Regex.replace(~r"%{(\w+)}", msg, fn _, key ->
