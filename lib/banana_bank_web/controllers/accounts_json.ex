@@ -10,7 +10,7 @@ defmodule BananaBankWeb.AccountsJSON do
   defp data(%Account{} = account) do
     %{
       id: account.id,
-      balance: account.balance
+      balance: Decimal.to_float(account.balance)
     }
   end
 end
