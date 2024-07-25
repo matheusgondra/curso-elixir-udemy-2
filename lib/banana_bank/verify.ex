@@ -4,14 +4,14 @@ defmodule BananaBank.Verify do
   def call(%{"email" => email, "password" => password}) do
     case Users.get(email) do
       {:ok, user} -> verify(user, password)
-      {:error, _} = error -> error
+      {:error, :not_found} -> {:error, :not_found_login}
     end
   end
 
   defp verify(user, password) do
     case Pbkdf2.verify_pass(password, user.password_hash) do
-      true -> {:ok, :valid_password}
-      false -> {:error, :unauthorized}
+      true -> {:ok, user}
+      false -> {:error, :unauthorized_login}
     end
   end
 end

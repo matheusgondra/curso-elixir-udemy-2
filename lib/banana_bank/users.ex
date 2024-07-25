@@ -1,4 +1,5 @@
 defmodule BananaBank.Users do
+  alias BananaBank.Verify
   alias BananaBank.Users.Delete
   alias BananaBank.Users.Update
   alias BananaBank.Users.Get
@@ -8,4 +9,5 @@ defmodule BananaBank.Users do
   defdelegate get(id_or_email), to: Get, as: :call
   defdelegate update(params), to: Update, as: :call
   defdelegate delete(id), to: Delete, as: :call
+  defdelegate login(params), to: Verify, as: :call
 end

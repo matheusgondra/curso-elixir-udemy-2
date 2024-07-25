@@ -20,6 +20,7 @@ defmodule BananaBankWeb.ErrorJSON do
   end
 
   def error(%{status: :not_found}), do: %{message: "Resource not found", status: :not_found}
+  def error(%{status: :error_login}), do: %{message: "Email or password invalid"}
   def error(%{status: status}), do: %{status: status}
   def error(%{msg: msg}), do: %{message: msg}
   def error(%{changeset: changeset}), do: %{errors: Ecto.Changeset.traverse_errors(changeset, &translate_error/1)}

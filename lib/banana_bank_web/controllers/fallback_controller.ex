@@ -10,6 +10,20 @@ defmodule BananaBankWeb.FallbackController do
     |> render(:error, status: :not_found)
   end
 
+  def call(conn, {:error, :not_found_login}) do
+    conn
+    |> put_status(:not_found)
+    |> put_view(json: ErrorJSON)
+    |> render(:error, status: :error_login)
+  end
+
+  def call(conn, {:error, :unauthorized_login}) do
+    conn
+    |> put_status(:not_found)
+    |> put_view(json: ErrorJSON)
+    |> render(:error, status: :error_login)
+  end
+
   def call(conn, {:error, :bad_request}) do
     conn
     |> put_status(:bad_request)
