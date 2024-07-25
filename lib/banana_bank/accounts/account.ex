@@ -17,6 +17,6 @@ defmodule BananaBank.Accounts.Account do
     account
     |> cast(params, @required_params)
     |> validate_required(@required_params)
-    |> check_constraint(:balance, name: :balence_must_be_positive)
+    |> check_constraint(:balance, name: :balance_must_be_positive)
   end
 end
