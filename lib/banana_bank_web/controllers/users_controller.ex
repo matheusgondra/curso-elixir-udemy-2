@@ -17,7 +17,7 @@ defmodule BananaBankWeb.UsersController do
   end
 
   def show(conn, %{"id" => id}) do
-    with {:ok, user} <- Users.get(id) do
+    with {:ok, user} <- Users.get(String.to_integer(id)) do
       conn
       |> put_status(:ok)
       |> render(:get, user: user)
